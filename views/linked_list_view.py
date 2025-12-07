@@ -3,6 +3,19 @@ import graphviz
 import inspect
 from data_structures import linkedListSingly 
 
+# Función auxiliar para mostrar complejidad bonita
+def mostrar_complejidad(time_comp, space_comp, detail=""):
+    st.markdown("---")
+    st.markdown("##### 📊 Complexity Analysis")
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown(f"**Time:** ${time_comp}$")
+    with c2:
+        st.markdown(f"**Space:** ${space_comp}$")
+    
+    if detail:
+        st.caption(detail)
+
 def dibujar_lista(head):
     # --- LOGICA DE DIBUJO ---
     dot = graphviz.Digraph()
@@ -109,66 +122,75 @@ def show_view():
         tab_neet, tab_code = st.tabs(["🎓 NeetCode Challenges", "💻 Source Code"])
 
         with tab_neet:
-            
-            # --- SECCIÓN 1: DETECCIÓN DE CICLOS (NeetCode 141) ---
-            st.markdown("#### 🟢 Linked List Cycle (NeetCode 141)")
-            st.caption("Check if the current list has a cycle.")
-            
-            # 1. HERRAMIENTAS DE PRUEBA
-            st.markdown("**1. Prepare Test Case:**")
-            col_c1, col_c2 = st.columns(2)
-            with col_c1:
-                if st.button("☣️ Create Cycle", help="Point last node to second node", use_container_width=True):
-                    curr = st.session_state.ll_head
-                    if curr and curr.next:
-                        while curr.next: curr = curr.next
-                        if st.session_state.ll_head.next: curr.next = st.session_state.ll_head.next 
-                        else: curr.next = st.session_state.ll_head
-                        st.warning("Cycle created! (Last -> 2nd)")
+            st.markdown("### 🧠 NeetCode Practice")
+            st.caption("Select a problem to expand its details and controls.")
+
+            # --- PROBLEMA 1: DETECCIÓN DE CICLOS ---
+            # Todo vive dentro de este expander
+            with st.expander("🟢 Linked List Cycle (NeetCode 141)"):
+                st.markdown("**Problem:** Given `head`, determine if the linked list has a cycle in it.")
+                
+                # A. Test Case Controls
+                st.info("🛠️ **Test Case Setup** (Use these to create a scenario)")
+                c1, c2 = st.columns(2)
+                with c1:
+                    if st.button("☣️ Create Cycle", help="Connect tail to 2nd node", use_container_width=True):
+                        # ... lógica create cycle ...
+                        curr = st.session_state.ll_head
+                        if curr and curr.next:
+                            while curr.next: curr = curr.next
+                            if st.session_state.ll_head.next: curr.next = st.session_state.ll_head.next 
+                            else: curr.next = st.session_state.ll_head
+                            st.warning("Cycle created!")
+                            st.rerun()
+                with c2:
+                    if st.button("🚑 Break Cycle", help="Restore linearity", use_container_width=True):
+                        st.session_state.ll_head = linkedListSingly.break_cycle(st.session_state.ll_head)
+                        st.success("Cycle broken.")
                         st.rerun()
-            with col_c2:
-                if st.button("🚑 Break Cycle", help="Point last node to None", use_container_width=True):
-                    st.session_state.ll_head = linkedListSingly.break_cycle(st.session_state.ll_head)
-                    st.success("Cycle broken. List is linear.")
-                    st.rerun()
 
-            # 2. EJECUTAR SOLUCIÓN
-            st.markdown("**2. Run Solution:**")
-            if st.button("▶️ Run Check (Has Cycle?)", key="nc_cycle", use_container_width=True):
-                res = linkedListSingly.has_cycle(st.session_state.ll_head)
-                if res: st.error("Result: True (Cycle detected!)")
-                else: st.success("Result: False (No cycle found)")
-                st.session_state.code_to_show = inspect.getsource(linkedListSingly.has_cycle)
+                # B. Run Solution
+                st.markdown("---")
+                if st.button("▶️ Run Solution", key="nc_cycle", use_container_width=True):
+                    res = linkedListSingly.has_cycle(st.session_state.ll_head)
+                    if res: st.error("Result: True (Cycle detected)")
+                    else: st.success("Result: False (No cycle)")
+                    st.session_state.code_to_show = inspect.getsource(linkedListSingly.has_cycle)
 
-            st.divider()
+                # C. Complexity (Integrado aquí mismo)
+                st.markdown("##### 📊 Complexity")
+                c_time, c_space = st.columns(2)
+                c_time.markdown("**Time:** $O(n)$")
+                c_space.markdown("**Space:** $O(1)$")
+                st.caption("*Floyd's Tortoise and Hare algorithm uses two pointers and constant space.*")
 
-            # --- SECCIÓN 2: REVERTIR LISTA (NeetCode 206) ---
-            st.markdown("#### 🟢 Reverse Linked List (NeetCode 206)")
-            st.caption("Reverses the list in place.")
-            
-            # PROTECCIÓN: Advertimos si hay ciclo antes de revertir
-            if linkedListSingly.has_cycle(st.session_state.ll_head):
-                st.warning("⚠️ Cannot reverse a cyclic list. Please 'Break Cycle' first.")
-            else:
-                if st.button("▶️ Run Solution (Reverse)", key="nc_reverse", use_container_width=True):
-                    st.session_state.ll_head = linkedListSingly.reverse_list(st.session_state.ll_head)
-                    st.session_state.code_to_show = inspect.getsource(linkedListSingly.reverse_list)
-                    st.rerun()
-            
-            st.divider()
-            
+
+            # --- PROBLEMA 2: REVERTIR LISTA ---
+            with st.expander("🟢 Reverse Linked List (NeetCode 206)"):
+                st.markdown("**Problem:** Reverse the singly linked list in-place.")
+                
+                # Check de seguridad
+                if linkedListSingly.has_cycle(st.session_state.ll_head):
+                    st.warning("⚠️ Cannot reverse a cyclic list. Please fix it in the problem above first.")
+                else:
+                    if st.button("▶️ Run Solution", key="nc_reverse", use_container_width=True):
+                        st.session_state.ll_head = linkedListSingly.reverse_list(st.session_state.ll_head)
+                        st.session_state.code_to_show = inspect.getsource(linkedListSingly.reverse_list)
+                        st.rerun()
+                    
+                    # Complexity
+                    st.markdown("---")
+                    st.markdown("##### 📊 Complexity")
+                    c_time, c_space = st.columns(2)
+                    c_time.markdown("**Time:** $O(n)$")
+                    c_space.markdown("**Space:** $O(1)$")
+                    st.caption("*Iterative approach. We flip pointers as we traverse once.*")
+
             # --- ROADMAP ---
-            with st.expander("🚧 Roadmap: Future Implementations"):
-                st.markdown("""
-                These are the **NeetCode** patterns planned for the next release. 
-                Feel free to contribute!
-                """)
-                st.checkbox("🟢 Middle of the Linked List (NeetCode 876)", value=False, disabled=True)
-                st.checkbox("🟡 Remove Nth Node From End of List (NeetCode 19)", value=False, disabled=True)
-                st.checkbox("🟢 Merge Two Sorted Lists (NeetCode 21)", value=False, disabled=True)
-                st.checkbox("🟡 Sort List (Merge Sort) (NeetCode 148)", value=False, disabled=True)
-                st.checkbox("🟢 Palindrome Linked List (NeetCode 234)", value=False, disabled=True)
-                st.caption("*Checked items are currently in development.*")
+            st.divider()
+            st.caption("🚧 **Roadmap**")
+            st.checkbox("🟢 Middle of List (NeetCode 876)", disabled=True)
+            st.checkbox("🟡 Remove Nth Node (NeetCode 19)", disabled=True)
                 
         with tab_code:
             st.markdown("### Logic Executed")
