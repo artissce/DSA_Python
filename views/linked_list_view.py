@@ -189,8 +189,12 @@ def show_view():
             # --- ROADMAP ---
             st.divider()
             st.caption("🚧 **Roadmap**")
-            st.checkbox("🟢 Middle of List (NeetCode 876)", disabled=True)
-            st.checkbox("🟡 Remove Nth Node (NeetCode 19)", disabled=True)
+            st.checkbox("🟢 Middle of the Linked List (NeetCode 876)", value=False, disabled=True)
+            st.checkbox("🟡 Remove Nth Node From End of List (NeetCode 19)", value=False, disabled=True)
+            st.checkbox("🟢 Merge Two Sorted Lists (NeetCode 21)", value=False, disabled=True)
+            st.checkbox("🟡 Sort List (Merge Sort) (NeetCode 148)", value=False, disabled=True)
+            st.checkbox("🟢 Palindrome Linked List (NeetCode 234)", value=False, disabled=True)
+            st.caption("*Checked items are currently in development.*")
                 
         with tab_code:
             st.markdown("### Logic Executed")
