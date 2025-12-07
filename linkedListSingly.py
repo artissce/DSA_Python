@@ -1,7 +1,9 @@
-class ListNode:
+class SinglyNode:
     def __init__(self,val=0,next=None):
         self.val=val
         self.next=next
+    def __str__(self):
+        return str(self.val)
 
 def delete_node(head, val_delete): # TODO CHECK
     # list is empty
@@ -28,12 +30,21 @@ def delete_node(head, val_delete): # TODO CHECK
     return head # the value is not in the list
 
 # auxiliar function
-def printList(head):
+def printList(head): # o(n)
     curr = head
     while curr:
         print(f"{curr.val} -> ",end="")
         curr = curr.next
     print("None")
+
+# search for node value - O(n)
+def search(head,val):
+    curr = head
+    while curr:
+        if val == curr.val:
+            return True
+        curr = curr.next
+    return False
 
 # reverse a list
 def reverse_list(head):
@@ -63,10 +74,10 @@ def has_cycle(head):
     return False # liebre is in the end, there is not cycle
 
 # manual creation
-node1 = ListNode(1)
-node2 = ListNode(2)
-node3 = ListNode(3)
-node4 = ListNode(4)
+node1 = SinglyNode(1)
+node2 = SinglyNode(2)
+node3 = SinglyNode(3)
+node4 = SinglyNode(4)
 
 # manual connection
 node1.next = node2
@@ -80,12 +91,16 @@ print("Reverse list")
 new_head = reverse_list(node1)
 printList(new_head)
 
-print("Testing cycle")
-node1.next = node3
-has_cycleNode = has_cycle(new_head)
-print(f"has cycle? {has_cycleNode}" )
 
-print("Delete 3")
+print("\nSearch")
+print(search(node1,8))
 
-head = delete_node(node1,3)
-printList(head)
+# print("Delete 3")
+# head = delete_node(node1,3)
+# printList(head)
+
+
+# print("Testing cycle")
+# node1.next = node3
+# has_cycleNode = has_cycle(new_head)
+# print(f"has cycle? {has_cycleNode}" )
